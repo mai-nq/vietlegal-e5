@@ -13,20 +13,7 @@ data:
   chunk_overlap_tokens: 64
   chunk_min_tokens: 50
 
-tsdae:
-  base_model: "intfloat/multilingual-e5-large"
-  lr: 0.000005
-  batch_size: 32
-  epochs: 1
-  max_seq_len: 512
-  warmup_steps: 2000
-  weight_decay: 0.01
-  scheduler: "warmup_linear"
-  eval_steps: 500
-  save_steps: 500
-  output_dir: "models/vietlegal-e5-tsdae"
-
-contrastive_r1:
+contrastive:
   base_model: "intfloat/multilingual-e5-large"
   lr: 0.00001
   per_device_batch_size: 48
@@ -37,7 +24,7 @@ contrastive_r1:
   matryoshka_dims: [1024, 512, 256, 128]
   eval_steps: 1000
   save_total_limit: 3
-  output_dir: "models/vietlegal-e5-r1-v2"
+  output_dir: "models/vietlegal-e5-contrastive"
 
 hard_neg:
   top_k: 100
@@ -51,11 +38,12 @@ hard_neg:
   faiss_ivf_nlist: 4096
   encode_batch_size: 512
   max_queries: 100000
+  output_dir: "models/vietlegal-e5-hard-neg"
 
-contrastive_r2:
+hard_neg_training:
   lr: 0.000005
   epochs: 2
-  output_dir: "models/vietlegal-e5-r2-v2"
+  output_dir: "models/vietlegal-e5-hard-neg"
 
 multitask:
   sampling_ratios:
@@ -64,7 +52,7 @@ multitask:
     sts: 0.1
   lr: 0.000005
   epochs: 1
-  output_dir: "models/vietlegal-e5-final-v2"
+  output_dir: "models/vietlegal-e5-final"
 
 synth:
   model_name: "Qwen/Qwen3-Next-80B-A3B-Instruct"
@@ -90,7 +78,7 @@ eval:
   halong_eval_dims: [768, 256]
 
 export:
-  hub_model_name: "vietlegal-e5"
+  hub_model_name: "mainguyen9/vietlegal-e5"
   onnx_export: true
   onnx_quantize_fp16: true
 

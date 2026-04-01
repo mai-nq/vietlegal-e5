@@ -8,13 +8,12 @@ Supports **Matryoshka embeddings** at dimensions [1024, 512, 256, 128] — the 1
 
 | Model | Params | Dim | NDCG@10 |
 |-------|--------|-----|---------|
-| **vietlegal-e5-final-v2** | 560M | 1024 | **0.7229** |
-| vietlegal-e5-final-v2 | 560M | 512 | 0.7208 |
-| vietlegal-e5-final-v2 | 560M | 256 | 0.7058 |
-| vietlegal-e5-final-v2 | 560M | 128 | 0.7073 |
+| **vietlegal-e5** | 560M | 1024 | **0.7229** |
+| vietlegal-e5 | 560M | 512 | 0.7208 |
+| vietlegal-e5 | 560M | 256 | 0.7058 |
+| vietlegal-e5 | 560M | 128 | 0.7073 |
 | microsoft/harrier-oss-v1-0.6b | 600M | 1024 | 0.7210 |
 | intfloat/multilingual-e5-large | 560M | 1024 | 0.6660 |
-| vietlegal-e5-r1-v2 | 560M | 1024 | 0.6725 |
 | bkai-foundation-models/vietnamese-bi-encoder | 135M | 768 | 0.6160 |
 | intfloat/multilingual-e5-base | 278M | 768 | 0.6030 |
 | contextboxai/halong_embedding | 278M | 768 | 0.6009 |
@@ -46,67 +45,50 @@ q_emb_256 = model.encode(queries)
 The model is trained through a multi-stage pipeline:
 
 ```
-Stage 0: Data Preparation
+Stage 1: Data Preparation
 │  518K Vietnamese legal docs → ~500K chunks (article-aware segmentation)
 │  Dataset: th1nhng0/vietnamese-legal-documents
-│
-Stage 1: TSDAE Domain Adaptation
-│  Unsupervised denoising autoencoder on legal chunks
-│  Loss: DenoisingAutoEncoderLoss (tie_encoder_decoder)
-│
-Stage 2: Training Data Preparation
 │  507K query-passage pairs from phamson02/large-vi-legal-queries
-│  + optional synthetic queries via Qwen3-80B (vLLM)
 │
-Stage 3: Contrastive Fine-tuning R1
+Stage 2: Contrastive Fine-tuning
 │  MatryoshkaLoss(MultipleNegativesRankingLoss) at dims [1024,512,256,128]
 │  → NDCG@10 = 0.6725
 │
-Stage 4: Hard Negative Mining + R2
+Stage 3: Hard Negative Mining
 │  FAISS retrieval → mine rank 50-100 as hard negatives
 │  Retrain with triplets (query, positive, hard_negative)
-│  → NDCG@10 = 0.6565
 │
-Stage 5: Multi-task Blending
+Stage 4: Multi-task Blending
 │  70% retrieval + 20% legal-type classification + 10% STS
-│  → NDCG@10 = 0.7229 (best, +5.04 points over R1)
+│  → NDCG@10 = 0.7229 (best)
 │
-Stage 6: Evaluation (MTEB ZacLegalTextRetrieval)
-│
-Stage 7: Export (HuggingFace Hub + ONNX)
+Stage 5: Evaluation & Export
 ```
 
-**Key insight**: Multi-task blending (Stage 5) provides the largest gain (+5.04 NDCG points), combining retrieval with legal document classification and semantic similarity to prevent overfitting.
+**Key insight**: Multi-task blending provides the largest gain (+5.04 NDCG points), combining retrieval with legal document classification and semantic similarity to prevent overfitting.
 
 ## Running the Pipeline
 
 ```bash
-# Stage 0: Chunk legal documents
+# Stage 1: Prepare data
 python scripts/prepare_data.py
-
-# Stage 1: TSDAE domain adaptation
-accelerate launch --num_processes=4 scripts/train_tsdae.py
-
-# Stage 2: Prepare training pairs
 python scripts/prepare_training.py
 
-# Stage 2.4 (optional): Generate synthetic queries
+# Stage 1.5 (optional): Generate synthetic queries
 python scripts/generate_queries.py
 
-# Stage 3: Contrastive fine-tuning R1
+# Stage 2: Contrastive fine-tuning
 accelerate launch --num_processes=4 scripts/train_contrastive.py
 
-# Stage 4: Mine hard negatives + train R2
+# Stage 3: Mine hard negatives + retrain
 python scripts/mine_hard_negatives.py
 accelerate launch --num_processes=4 scripts/train_hard_neg.py
 
-# Stage 5: Multi-task blending
+# Stage 4: Multi-task blending
 accelerate launch --num_processes=4 scripts/train_multitask.py
 
-# Stage 6: Evaluate
+# Stage 5: Evaluate & export
 python scripts/evaluate.py
-
-# Stage 7: Export to HF Hub + ONNX
 python scripts/export.py
 ```
 
@@ -114,12 +96,12 @@ python scripts/export.py
 
 | Dataset | Stage | Records | Description |
 |---------|-------|---------|-------------|
-| `chunks.parquet` | 0 | ~500K | Legal doc chunks with metadata |
-| `train.parquet` | 2 | ~480K | Query-passage pairs (with prefixes) |
-| `val.parquet` | 2 | ~12.5K | Validation split |
-| `test.parquet` | 2 | ~12.5K | Test split |
-| `hard_negatives.parquet` | 4 | ~1.5M | Mined triplets (193MB) |
-| `synthetic_queries.parquet` | 2.4 | — | LLM-generated pairs (66MB) |
+| `chunks.parquet` | 1 | ~500K | Legal doc chunks with metadata |
+| `train.parquet` | 1 | ~480K | Query-passage pairs (with prefixes) |
+| `val.parquet` | 1 | ~12.5K | Validation split |
+| `test.parquet` | 1 | ~12.5K | Test split |
+| `hard_negatives.parquet` | 3 | ~1.5M | Mined triplets (193MB) |
+| `synthetic_queries.parquet` | 1.5 | — | LLM-generated pairs (66MB, optional) |
 
 ## Configuration
 
@@ -148,16 +130,15 @@ pip install -r requirements.txt
 ```
 ├── config.yaml              # Central configuration
 ├── scripts/
-│   ├── prepare_data.py      # Stage 0: Chunking
-│   ├── train_tsdae.py       # Stage 1: Domain adaptation
-│   ├── prepare_training.py  # Stage 2: Data splits
-│   ├── generate_queries.py  # Stage 2.4: Synthetic queries
-│   ├── train_contrastive.py # Stage 3: Contrastive R1
-│   ├── mine_hard_negatives.py # Stage 4: Hard neg mining
-│   ├── train_hard_neg.py    # Stage 4: Contrastive R2
-│   ├── train_multitask.py   # Stage 5: Multi-task
-│   ├── evaluate.py          # Stage 6: MTEB eval
-│   ├── export.py            # Stage 7: Export
+│   ├── prepare_data.py      # Stage 1: Chunking
+│   ├── prepare_training.py  # Stage 1: Data splits
+│   ├── generate_queries.py  # Stage 1.5: Synthetic queries (optional)
+│   ├── train_contrastive.py # Stage 2: Contrastive training
+│   ├── mine_hard_negatives.py # Stage 3: Hard neg mining
+│   ├── train_hard_neg.py    # Stage 3: Retrain with hard negs
+│   ├── train_multitask.py   # Stage 4: Multi-task blending
+│   ├── evaluate.py          # Stage 5: MTEB eval
+│   ├── export.py            # Stage 5: Export
 │   └── utils.py             # Shared utilities
 ├── data/                    # Training data (parquet)
 ├── models/                  # Model checkpoints
