@@ -1,10 +1,0 @@
-Model prompts specified, these will overwrite the default model prompts. Current prompts will be:
- {'query': 'Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: '}
-/home/mainq/miniconda3/lib/python3.13/site-packages/mteb/models/sentence_transformer_wrapper.py:113: UserWarning: Model prompts specified, these will overwrite the default model prompts. Current prompts will be:
- {'query': 'Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: '}
-  warnings.warn(msg)
-SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {'query': 'Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: '}
-/home/mainq/miniconda3/lib/python3.13/site-packages/mteb/models/sentence_transformer_wrapper.py:136: UserWarning: SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {'query': 'Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: '}
-  warnings.warn(msg)
-Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [16:04<00:00, 964.90s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [16:04<00:00, 964.90s/it]
-harrier-oss-v1-0.6b dim=1024: NDCG@10 = 0.72097

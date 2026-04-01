@@ -2,23 +2,38 @@
 data/*.parquet
 data/synth_checkpoint.json
 
-# Model checkpoints (multi-GB)
+# Model checkpoints (multi-GB, published separately to HuggingFace)
 models/
 
 # Eval results (regenerable)
 eval/
 
+# Archived logs (keep v2 logs only)
+logs/archive/
+
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
 .eggs/
+dist/
+build/
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # W&B
 wandb/
 
-# uv
+# Virtual environments
 .venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db

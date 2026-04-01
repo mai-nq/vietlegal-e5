@@ -26,7 +26,8 @@ Evaluated on [MTEB ZacLegalTextRetrieval](https://huggingface.co/datasets/GreenN
 ```python
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("models/vietlegal-e5-final-v2")
+# Load from HuggingFace Hub
+model = SentenceTransformer("mainguyen9/vietlegal-e5")
 
 # Important: mE5 models require "query: " and "passage: " prefixes
 queries = ["query: Thủ tục đăng ký kinh doanh gồm những bước nào?"]
