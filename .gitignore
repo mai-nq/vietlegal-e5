@@ -1,0 +1,24 @@
+# Data artifacts (large binary files)
+data/*.parquet
+data/synth_checkpoint.json
+
+# Model checkpoints (multi-GB)
+models/
+
+# Eval results (regenerable)
+eval/
+
+# Python
+__pycache__/
+*.pyc
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+
+# W&B
+wandb/
+
+# uv
+.venv/

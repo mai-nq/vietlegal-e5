@@ -1,0 +1,21 @@
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /home/mainq/.netrc.
+wandb: Currently logged in as: mainq-ict (mainq-ict-) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run f2tchnld
+wandb: Tracking run with wandb version 0.25.1
+wandb: Run data is saved locally in /home/mainq/vietlegal_e5/wandb/run-20260329_162208-f2tchnld
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run evaluation
+wandb: ⭐️ View project at https://wandb.ai/mainq-ict-/vietlegal-e5
+wandb: 🚀 View run at https://wandb.ai/mainq-ict-/vietlegal-e5/runs/f2tchnld
+2026-03-29 16:22:10,250 [evaluate] INFO: Loading eval dataset: minhnguyent546/zalo-ai-legal-text-retrieval-2021
+2026-03-29 16:22:18,657 [evaluate] INFO: Eval corpus: 61425 articles, 640 queries, 640 qrels
+2026-03-29 16:22:18,666 [evaluate] INFO: Models to evaluate: ['multilingual-e5-large', 'multilingual-e5-base', 'halong_embedding', 'vietnamese-bi-encoder', 'VietnamLegalText-SBERT']
+2026-03-29 16:22:18,666 [evaluate] INFO: Evaluating: multilingual-e5-large
+2026-03-29 16:22:23,951 [evaluate] INFO:   Evaluating at dim=1024...
+Batches:   0%|          | 0/20 [00:00<?, ?it/s]Batches:   5%|▌         | 1/20 [00:00<00:07,  2.60it/s]Batches:  25%|██▌       | 5/20 [00:00<00:01, 12.16it/s]Batches:  45%|████▌     | 9/20 [00:00<00:00, 18.61it/s]Batches:  65%|██████▌   | 13/20 [00:00<00:00, 23.77it/s]Batches:  90%|█████████ | 18/20 [00:00<00:00, 30.49it/s]Batches: 100%|██████████| 20/20 [00:00<00:00, 22.63it/s]
+Corpus Chunks:   0%|          | 0/2 [00:00<?, ?it/s]Corpus Chunks:  50%|█████     | 1/2 [05:39<05:39, 339.60s/it]Corpus Chunks: 100%|██████████| 2/2 [06:58<00:00, 186.28s/it]Corpus Chunks: 100%|██████████| 2/2 [06:58<00:00, 209.28s/it]
+2026-03-29 16:29:23,469 [evaluate] INFO:   multilingual-e5-large_dim1024: {'multilingual-e5-large_dim1024_cosine_accuracy@1': 0.5265625, 'multilingual-e5-large_dim1024_cosine_accuracy@3': 0.721875, 'multilingual-e5-large_dim1024_cosine_accuracy@5': 0.7828125, 'multilingual-e5-large_dim1024_cosine_accuracy@10': 0.871875, 'multilingual-e5-large_dim1024_cosine_precision@1': 0.5265625, 'multilingual-e5-large_dim1024_cosine_precision@3': 0.240625, 'multilingual-e5-large_dim1024_cosine_precision@5': 0.1565625, 'multilingual-e5-large_dim1024_cosine_precision@10': 0.0871875, 'multilingual-e5-large_dim1024_cosine_recall@1': 0.5265625, 'multilingual-e5-large_dim1024_cosine_recall@3': 0.721875, 'multilingual-e5-large_dim1024_cosine_recall@5': 0.7828125, 'multilingual-e5-large_dim1024_cosine_recall@10': 0.871875, 'multilingual-e5-large_dim1024_cosine_ndcg@10': 0.6977110500891699, 'multilingual-e5-large_dim1024_cosine_mrr@10': 0.6424652777777776, 'multilingual-e5-large_dim1024_cosine_map@100': 0.6470366106028921}
+2026-03-29 16:29:23,485 [evaluate] INFO: Evaluating: multilingual-e5-base
+2026-03-29 16:29:29,667 [evaluate] INFO:   Evaluating at dim=768...
+Batches:   0%|          | 0/20 [00:00<?, ?it/s]Batches:  50%|█████     | 10/20 [00:00<00:00, 90.73it/s]Batches: 100%|██████████| 20/20 [00:00<00:00, 91.54it/s]Batches: 100%|██████████| 20/20 [00:00<00:00, 91.24it/s]
+Corpus Chunks:   0%|          | 0/2 [00:00<?, ?it/s]

@@ -1,0 +1,11 @@
+2026-03-25 08:14:00,372 [generate_queries] INFO: Loading chunks...
+2026-03-25 08:14:33,703 [generate_queries] INFO: Resuming from checkpoint at index 70016
+2026-03-25 08:14:34,816 [generate_queries] INFO: Using external vLLM server on port 8007
+2026-03-25 08:14:34,820 [generate_queries] INFO: External vLLM server is healthy!
+2026-03-25 08:30:14,861 [generate_queries] INFO: Checkpoint at 80,000/5,044,412 — 161,772 pairs
+2026-03-25 08:46:23,042 [generate_queries] INFO: Checkpoint at 90,048/5,044,412 — 191,895 pairs
+2026-03-25 09:02:08,989 [generate_queries] INFO: Checkpoint at 100,032/5,044,412 — 221,841 pairs
+2026-03-25 09:17:59,056 [generate_queries] INFO: Checkpoint at 110,016/5,044,412 — 251,787 pairs
+2026-03-25 09:34:17,337 [generate_queries] INFO: Checkpoint at 120,000/5,044,412 — 281,739 pairs
+2026-03-25 09:51:51,242 [generate_queries] INFO: Checkpoint at 130,048/5,044,412 — 311,838 pairs
+2026-03-25 10:07:45,898 [generate_queries] INFO: Checkpoint at 140,032/5,044,412 — 341,775 pairs

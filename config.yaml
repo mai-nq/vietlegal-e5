@@ -1,0 +1,111 @@
+paths:
+  base_dir: "."
+  data_dir: "data"
+  model_dir: "models"
+  eval_dir: "eval"
+
+data:
+  legal_docs_dataset: "th1nhng0/vietnamese-legal-documents"
+  query_pairs_dataset: "phamson02/large-vi-legal-queries"
+  min_content_chars: 100
+  chunk_max_tokens: 512
+  chunk_window_tokens: 256
+  chunk_overlap_tokens: 64
+  chunk_min_tokens: 50
+
+tsdae:
+  base_model: "intfloat/multilingual-e5-large"
+  lr: 0.000005
+  batch_size: 32
+  epochs: 1
+  max_seq_len: 512
+  warmup_steps: 2000
+  weight_decay: 0.01
+  scheduler: "warmup_linear"
+  eval_steps: 500
+  save_steps: 500
+  output_dir: "models/vietlegal-e5-tsdae"
+
+contrastive_r1:
+  base_model: "intfloat/multilingual-e5-large"
+  lr: 0.00001
+  per_device_batch_size: 48
+  grad_accum_steps: 2
+  epochs: 3
+  warmup_ratio: 0.1
+  scheduler: "cosine"
+  matryoshka_dims: [1024, 512, 256, 128]
+  eval_steps: 1000
+  save_total_limit: 3
+  output_dir: "models/vietlegal-e5-r1-v2"
+
+hard_neg:
+  top_k: 100
+  neg_range_start: 50
+  neg_range_end: 100
+  use_cross_encoder: false
+  cross_encoder_model: "BAAI/bge-reranker-v2-m3"
+  cross_encoder_threshold: 0.5
+  max_negatives_per_query: 3
+  faiss_index_type: "flat"
+  faiss_ivf_nlist: 4096
+  encode_batch_size: 512
+  max_queries: 100000
+
+contrastive_r2:
+  lr: 0.000005
+  epochs: 2
+  output_dir: "models/vietlegal-e5-r2-v2"
+
+multitask:
+  sampling_ratios:
+    retrieval: 0.7
+    classification: 0.2
+    sts: 0.1
+  lr: 0.000005
+  epochs: 1
+  output_dir: "models/vietlegal-e5-final-v2"
+
+synth:
+  model_name: "Qwen/Qwen3-Next-80B-A3B-Instruct"
+  fallback_model: "Qwen/Qwen3-Next-80B-A3B-Instruct-FP8"
+  vllm_tensor_parallel: 4
+  vllm_max_model_len: 4096
+  vllm_port: 8000
+  num_queries_per_chunk: 3
+  batch_size: 64
+  checkpoint_every_n: 10000
+  max_new_tokens: 512
+  temperature: 0.7
+
+eval:
+  mteb_task: "ZacLegalTextRetrieval"
+  matryoshka_dims: [1024, 512, 256, 128]
+  eval_all_checkpoints: true
+  baselines:
+    - "intfloat/multilingual-e5-large"
+    - "intfloat/multilingual-e5-base"
+    - "contextboxai/halong_embedding"
+    - "bkai-foundation-models/vietnamese-bi-encoder"
+  halong_eval_dims: [768, 256]
+
+export:
+  hub_model_name: "vietlegal-e5"
+  onnx_export: true
+  onnx_quantize_fp16: true
+
+wandb:
+  project: "vietlegal-e5"
+  tags: ["legal", "vietnamese", "embedding", "me5-large"]
+
+hardware:
+  num_gpus: 4
+  bf16: true
+  dataloader_workers: 4
+  seed: 42
+
+split:
+  train_ratio: 0.95
+  val_ratio: 0.025
+  test_ratio: 0.025
+  seed: 42

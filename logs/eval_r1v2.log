@@ -1,0 +1,9 @@
+The tokenizer you are loading from 'models/vietlegal-e5-r1-v2' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:52<00:00, 952.52s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:52<00:00, 952.52s/it]
+vietlegal-e5-r1-v2 dim=1024: NDCG@10 = 0.67247
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:47<00:00, 947.80s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:47<00:00, 947.80s/it]
+vietlegal-e5-r1-v2 dim=512: NDCG@10 = 0.66645
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:49<00:00, 949.77s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:49<00:00, 949.77s/it]
+vietlegal-e5-r1-v2 dim=256: NDCG@10 = 0.65749
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:49<00:00, 949.27s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [15:49<00:00, 949.27s/it]
+vietlegal-e5-r1-v2 dim=128: NDCG@10 = 0.6577

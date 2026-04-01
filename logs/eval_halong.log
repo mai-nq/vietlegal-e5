@@ -1,0 +1,6 @@
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [05:26<00:00, 326.85s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [05:26<00:00, 326.85s/it]
+halong_embedding dim=768: NDCG@10 = 0.60087
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [05:22<00:00, 322.63s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [05:22<00:00, 322.63s/it]
+halong_embedding dim=256: NDCG@10 = 0.54943
+Evaluating tasks:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [05:26<00:00, 326.34s/it]Evaluating task ZacLegalTextRetrieval: 100%|██████████| 1/1 [05:26<00:00, 326.34s/it]
+halong_embedding dim=128: NDCG@10 = 0.50999
