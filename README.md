@@ -1,41 +1,63 @@
-# VietLegal-E5
+# VietLegal Embedding Models
 
-A Vietnamese legal domain embedding model fine-tuned from `intfloat/multilingual-e5-large` (560M params, 1024-dim). Achieves **NDCG@10 = 0.7229** on the Zalo AI Legal Text Retrieval benchmark, outperforming `microsoft/harrier-oss-v1-0.6b` (0.7210) and the zero-shot mE5-large baseline (0.6660) by **+5.69 points**.
+Vietnamese legal domain embedding models fine-tuned for legal text retrieval. This repository contains training code and pipelines for two model families:
 
-Supports **Matryoshka embeddings** at dimensions [1024, 512, 256, 128] — the 128-dim output (0.7073) still beats mE5-large at full 1024-dim, enabling **8x compression** with no quality loss.
+- **VietLegal-Harrier-0.6B** - State-of-the-art, fine-tuned from `microsoft/harrier-oss-v1-0.6b`
+- **VietLegal-E5** - Fine-tuned from `intfloat/multilingual-e5-large` with Matryoshka support
 
 ## Results
 
-| Model | Params | Dim | NDCG@10 |
-|-------|--------|-----|---------|
-| **vietlegal-e5** | 560M | 1024 | **0.7229** |
-| vietlegal-e5 | 560M | 512 | 0.7208 |
-| vietlegal-e5 | 560M | 256 | 0.7058 |
-| vietlegal-e5 | 560M | 128 | 0.7073 |
-| microsoft/harrier-oss-v1-0.6b | 600M | 1024 | 0.7210 |
-| intfloat/multilingual-e5-large | 560M | 1024 | 0.6660 |
-| bkai-foundation-models/vietnamese-bi-encoder | 135M | 768 | 0.6160 |
-| intfloat/multilingual-e5-base | 278M | 768 | 0.6030 |
-| contextboxai/halong_embedding | 278M | 768 | 0.6009 |
-
 Evaluated on [MTEB ZacLegalTextRetrieval](https://huggingface.co/datasets/GreenNode/zalo-ai-legal-text-retrieval-vn) (61.4K corpus documents, 818 test queries).
 
+| Model | Params | NDCG@10 | MRR@10 | Recall@10 |
+|-------|--------|---------|--------|-----------|
+| **[vietlegal-harrier-0.6b](https://huggingface.co/mainguyen9/vietlegal-harrier-0.6b)** | 600M | **0.7813** | **0.7303** | **0.9321** |
+| vietlegal-harrier-270m | 270M | 0.7174 | 0.6636 | 0.8864 |
+| [vietlegal-e5](https://huggingface.co/mainguyen9/vietlegal-e5) (mE5-large) | 560M | 0.7310 | 0.6770 | 0.8972 |
+| microsoft/harrier-oss-v1-0.6b | 600M | 0.7210 | - | - |
+| intfloat/multilingual-e5-large | 560M | 0.6660 | - | - |
+| bkai-foundation-models/vietnamese-bi-encoder | 135M | 0.6160 | - | - |
+
+**Key highlights:**
+- **VietLegal-Harrier-0.6B** achieves state-of-the-art on Vietnamese legal retrieval
+- **+5.0 points NDCG@10** over vietlegal-e5 (mE5-large): 0.7813 vs 0.7310
+- **+6.0 points NDCG@10** over original Harrier-0.6b: 0.7813 vs 0.7210
+- VietLegal-E5 supports **Matryoshka embeddings** at [1024, 512, 256, 128] dims
+
 ## Usage
+
+### VietLegal-Harrier-0.6B (Recommended)
 
 ```python
 from sentence_transformers import SentenceTransformer
 
-# Load from HuggingFace Hub
-model = SentenceTransformer("mainguyen9/vietlegal-e5")
+model = SentenceTransformer("mainguyen9/vietlegal-harrier-0.6b")
 
-# Important: mE5 models require "query: " and "passage: " prefixes
-queries = ["query: Thủ tục đăng ký kinh doanh gồm những bước nào?"]
-passages = ["passage: Điều 27. Trình tự, thủ tục đăng ký doanh nghiệp..."]
+# Harrier uses instruction-based queries
+queries = ["Instruct: Given a Vietnamese legal question, retrieve relevant legal passages that answer the question\nQuery: Thu tuc dang ky kinh doanh gom nhung buoc nao?"]
+passages = ["Dieu 27. Trinh tu, thu tuc dang ky doanh nghiep..."]
 
 q_emb = model.encode(queries)
 p_emb = model.encode(passages)
 
-# For Matryoshka — truncate to desired dimension
+similarity = q_emb @ p_emb.T
+```
+
+### VietLegal-E5 (with Matryoshka support)
+
+```python
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("mainguyen9/vietlegal-e5")
+
+# E5 models require "query: " and "passage: " prefixes
+queries = ["query: Thu tuc dang ky kinh doanh gom nhung buoc nao?"]
+passages = ["passage: Dieu 27. Trinh tu, thu tuc dang ky doanh nghiep..."]
+
+q_emb = model.encode(queries)
+p_emb = model.encode(passages)
+
+# For Matryoshka - truncate to desired dimension
 model.truncate_dim = 256
 q_emb_256 = model.encode(queries)
 ```
