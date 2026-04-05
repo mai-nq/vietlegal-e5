@@ -17,6 +17,7 @@ Evaluated on [MTEB ZacLegalTextRetrieval](https://huggingface.co/datasets/GreenN
 | microsoft/harrier-oss-v1-0.6b | 600M | 0.7210 | - | - |
 | intfloat/multilingual-e5-large | 560M | 0.6660 | - | - |
 | bkai-foundation-models/vietnamese-bi-encoder | 135M | 0.6160 | - | - |
+| contextboxai/halong_embedding | 278M | 0.6009 | - | - |
 
 **Key highlights:**
 - **VietLegal-Harrier-0.6B** achieves state-of-the-art on Vietnamese legal retrieval
